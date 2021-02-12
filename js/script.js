@@ -110,6 +110,8 @@ window.addEventListener(`load`, (event) => {
         fetch(url, data)
             .then(response => response.json()).then(response => {
                 result.innerHTML = ``
+                if (response.types.length === 0)
+                    result.innerHTML = `<p>No Data Found</p>`
                 return response.types.map(createTransmissionResult)
             }).catch(error => {
                 console.log(error)
@@ -131,6 +133,9 @@ window.addEventListener(`load`, (event) => {
         fetch(url, data)
             .then(response => response.json()).then(response => {
                 result.innerHTML = ``
+                console.log('abc', response.length);
+                if (response.length === 0)
+                    result.innerHTML = `<p>No Data Found</p>`
                 return response.map(createFinalResult)
             }).catch(error => {
                 console.log(error)
