@@ -22,10 +22,10 @@
             <nav class="container">
                 <ul class="flex flex-right">
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">Transmission Types</a></li>
+                    <li><a href="./index.html">Transmission Types</a></li>
                     <li><a href="#"></a>FAQs</li>
                 </ul>
-            </div>
+        </div>
         </div>
     </header>
     <main>
@@ -38,11 +38,12 @@
             <div class="container text-center">
                 <div class="grid grid-2">
                     <div class="text-left">
-                        <h2 class="color-black covid-h2">Covid-19 Transmission Types</h2>
+                        <h2 id="mainHeading" class="color-black covid-h2">Covid-19 Transmission Types</h2>
                     </div>
                     <div class="text-right">
-                        <input type="text" readonly class="input-search" placeholder="Filter by transmission type.."><i
-                            class="fas fa-search embed-search"></i>
+                        <a id="backButton" class="back_anchor hidden">Back </a>
+                        <input type="text" id="text_search" readonly class="input-search" placeholder="Filter by transmission type.."><i
+                            id = "search_icon" class="fas fa-search embed-search"></i>
                     </div>
                 </div>
             </div>
@@ -53,7 +54,7 @@
                 </div>
             </div>
         </section>
-    </main> 
+    </main>
     <footer class="text-center">
         <p>&copy; 2021. Covid-19.</p>
     </footer>

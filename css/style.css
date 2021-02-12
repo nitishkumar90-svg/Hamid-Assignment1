@@ -1,3 +1,4 @@
+
 :root {
     --header-font: 'Sigmar One', cursive;
     --primary-font: 'Open Sans', sans-serif;
@@ -129,6 +130,19 @@ header nav li:hover {
     background: var(--white-color);
     box-shadow: 4px 3px 8px 1px #ccc;
     -webkit-box-shadow: 4px 3px 8px 1px #ccc;
+}
+
+.hidden {
+    display: none;
+}
+
+.back_anchor {
+    cursor: pointer;
+}
+
+.sub-heading {
+    color: var(--primary-color);
+    padding-bottom: 0.4em;
 }
 
 .content div:hover {
