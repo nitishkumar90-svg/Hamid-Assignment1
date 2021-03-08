@@ -8,10 +8,10 @@ let backButton = document.getElementById(`backButton`),
         "method": "GET",
         "headers": {
             "x-rapidapi-key": "daf35c45d6msha57c852baf4b504p1efceajsned7156504bd9",
-            "x-rapidapi-host": "who-covid-19-data.p.rapidapi.com"
+            "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com"
         }
     },
-    mainUrl = `https://who-covid-19-data.p.rapidapi.com/api/data`
+    mainUrl = `https://covid-19-statistics.p.rapidapi.com`
 
 //#endregion
 
@@ -29,7 +29,7 @@ window.addEventListener(`load`, (event) => {
         return newElem
     }
 
-    let createTransmissionResult = ({ number, name, desc }) => {
+    let createTransmissionResult = ({ iso, name }) => {
         let classes = []
         classes.push(`box-shadow`)
         let divElement = createElement(`div`, classes)
@@ -38,9 +38,9 @@ window.addEventListener(`load`, (event) => {
         classes.splice(0, classes.length)
         let aTag = createElement(`a`, classes)
         aTag.setAttribute(`href`, `javascript:void(0)`)
-        aTag.setAttribute(`id`, number)
+        aTag.setAttribute(`id`, iso)
         aTag.addEventListener(`click`, () => {
-            getRecordsByTransmissionId(number, name)
+            getRecordsByTransmissionId(iso)
         })
 
         //need to add h4 tag inside anchor tag
@@ -49,12 +49,6 @@ window.addEventListener(`load`, (event) => {
         let h1Tag = createElement(`h4`, classes)
         h1Tag.innerText = name
         aTag.appendChild(h1Tag)
-
-        //need to add p tag inside anchor tag
-        classes.splice(0, classes.length)
-        let pTag = createElement(`p`, classes)
-        pTag.innerText = desc
-        aTag.appendChild(pTag)
         divElement.appendChild(aTag)
 
         result.appendChild(divElement)
@@ -62,7 +56,7 @@ window.addEventListener(`load`, (event) => {
     }
 
 
-    let createFinalResult = ({ name, cases, newCases, deaths, newDeaths }) => {
+    let createFinalResult = ({ date, confirmed, confirmed_diff, deaths, recoverd, active }) => {
         let classes = []
         classes.push(`box-shadow`)
         let divElement = createElement(`div`, classes)
@@ -70,17 +64,17 @@ window.addEventListener(`load`, (event) => {
         classes.splice(0, classes.length)
         classes.push(`sub-heading`)
         let h1Tag = createElement(`h4`, classes)
-        h1Tag.innerText = name
+        h1Tag.innerText = date
         divElement.appendChild(h1Tag)
 
         classes.splice(0, classes.length)
         let pTag = createElement(`p`, classes)
-        pTag.innerHTML = `<b>Cases</b>: ${cases}`
+        pTag.innerHTML = `<b>Cases</b>: ${confirmed}`
         divElement.appendChild(pTag)
 
         classes.splice(0, classes.length)
         pTag = createElement(`p`, classes)
-        pTag.innerHTML = `<b>New Cases</b>: ${newCases}`
+        pTag.innerHTML = `<b>New Cases</b>: ${confirmed_diff}`
         divElement.appendChild(pTag)
 
         classes.splice(0, classes.length)
@@ -90,7 +84,7 @@ window.addEventListener(`load`, (event) => {
 
         classes.splice(0, classes.length)
         pTag = createElement(`p`, classes)
-        pTag.innerHTML = `<b>New Deaths</b>: ${newDeaths}`
+        pTag.innerHTML = `<b>Recovered</b>: ${recoverd}`
         divElement.appendChild(pTag)
 
         result.appendChild(divElement)
@@ -107,36 +101,30 @@ window.addEventListener(`load`, (event) => {
         mainHeading.innerHTML = `Covid-19 Transmission Types`
         let url = `${mainUrl}/transmissionTypes`
 
-        fetch(url, data)
-            .then(response => response.json()).then(response => {
-                result.innerHTML = ``
-                if (response.types.length === 0)
-                    result.innerHTML = `<p>No Data Found</p>`
-                return response.types.map(createTransmissionResult)
-            }).catch(error => {
-                console.log(error)
-            })
+        fetch(`${mainUrl}/regions`, data).then(response => response.json()).then(response => {
+            result.innerHTML = ``
+            if (response.data.length === 0)
+                result.innerHTML = `<p>No Data Found</p>`
+            return response.data.map(createTransmissionResult)
+        }).catch(error => {
+            console.log(error)
+        })
 
     }
 
-    let getRecordsByTransmissionId = (transmissionId, transmissionName) => {
+    let getRecordsByTransmissionId = (iso) => {
         txtSearch.classList.add(`hidden`)
         searchIcon.classList.add(`hidden`)
         backButton.classList.remove(`hidden`)
-        mainHeading.innerHTML = transmissionName
+        mainHeading.innerHTML = iso
         result.innerHTML = `<p>Please wait...</p>`
         let url = ``
-        if (transmissionId !== 0)
-            url = `${mainUrl}?transmissionType=${transmissionId}&reportDate=2020-03-25`
-        else
-            url = `${mainUrl}?reportDate=2020-03-25`
-        fetch(url, data)
+        fetch(`${mainUrl}/reports/total?date=2020-04-07`, data)
             .then(response => response.json()).then(response => {
                 result.innerHTML = ``
-                console.log('abc', response.length);
-                if (response.length === 0)
+                if (response.data === undefined)
                     result.innerHTML = `<p>No Data Found</p>`
-                return response.map(createFinalResult)
+                return createFinalResult(response.data)
             }).catch(error => {
                 console.log(error)
             })
