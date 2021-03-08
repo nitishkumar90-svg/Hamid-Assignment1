@@ -8,7 +8,8 @@ let backButton = document.getElementById(`backButton`),
         "method": "GET",
         "headers": {
             "x-rapidapi-key": "daf35c45d6msha57c852baf4b504p1efceajsned7156504bd9",
-            "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com"
+            "x-rapidapi-host": "covid-19-statistics.p.rapidapi.com",
+            "Access-Control-Allow-Origin": "*"
         }
     },
     mainUrl = `https://covid-19-statistics.p.rapidapi.com`
